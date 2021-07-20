@@ -20,21 +20,20 @@ import psycopg2 as pg
 Обединява необходимата информация и я записва в таблица emission на sofix_db.
 
 """
+# TODO clean table if there new period - better do this with all DB before new period
+
+
 PATH_CD_START_POINT_DATA = 'data/initial_data/FREE_FLOAT.pdf'
 PATH_BASE_MARKET_EMISSION_DATA = 'data/initial_data/Base_Market_Emission.csv'
 PATH_BSE_CODE_INVESTOR = 'data/initial_data/mapping_bse_codies.xlsx'
+
 
 def send_data_to_emission_table(participants):
     connection = pg.connect ( "host='127.0.0.1' port='5432' dbname='sofix_db' user='postgres' password='1234'" )
     cur = connection.cursor ()
     df = participants  # pd.read_csv('input_file.csv',parse_dates=['timestamp'],index_col=0)
     ids = cur.execute ( 'select emission_id from "emission"' )
-
-    # TODO clean table if there new period - better do this with all DB before new period
-
-    id = 1
-    if ids:
-        id = len ( ids ) + 1
+    id = cur.rowcount+1
     for index, row in df.iterrows ():
         emission_id = str ( id )
         emission_name = str ( row[1] )
@@ -54,11 +53,10 @@ def send_data_to_emission_table(participants):
         except Exception as e:
             print ( "some insert error:", e, "ins: ", insertdata )
         connection.commit ()
-        # cur.close ()
-        # connection.close ()
 
 
 def read_data_from_cd(path):
+    # TODO - Евентуално четенето да го преизползвам  - да го разбия на обща и специфична част.
     cd_data = read_pdf ( path, pages="all", area=(11, 0, 100, 110), stream=True, relative_area=True )
     for i in range ( 0, len ( cd_data ) ):
         cd_data[i].columns = ['name', 'isin', 'total_count', 'free_float', 'shareholders_count']
@@ -106,7 +104,6 @@ cd_data = read_data_from_cd ( PATH_CD_START_POINT_DATA )
 bse_data = read_data_from_bse ( PATH_BASE_MARKET_EMISSION_DATA )
 participants = generate_participants ( bse_data, cd_data, PATH_BSE_CODE_INVESTOR )
 send_data_to_emission_table ( participants )
-# print (participants)
 
 
 # https://tabula-py.readthedocs.io/en/latest/tabula.html
