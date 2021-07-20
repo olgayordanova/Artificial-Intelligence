@@ -1,6 +1,6 @@
 CREATE table emission (
 	emission_id INTEGER NOT NULL PRIMARY KEY,
-	emission_name CHARACTER VARYING(25),
+	emission_name CHARACTER VARYING(100),
 	emission_isin CHARACTER VARYING(12) UNIQUE,
 	emission_bse_code_old CHARACTER VARYING(8) UNIQUE,
 	emission_bse_code_new CHARACTER VARYING(8) UNIQUE,
