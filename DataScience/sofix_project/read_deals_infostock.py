@@ -2,6 +2,9 @@ import pandas as pd
 import psycopg2 as pg
 import re
 import datetime
+
+from core import get_date_from_filename
+
 """
 Този модул чете данни за сключените на БФБ сделки.
 Модула се изпълнява ежедневно по данни от предходния ден.
@@ -11,6 +14,7 @@ import datetime
 
 Взема информация за всички сключени сделки с наблюдаваните емисии и я записва в таблица count_deals на sofix_db.
 """
+
 # TODO clean table if there new period - better do this with all DB before new period df
 #  ['Week_Number'] = df['Date'].dt.week
 
@@ -18,27 +22,20 @@ PATH_DEALS_INFOSTOCK = 'data/daily_data/DealsInfostock-19072021.xlsx'
 # TODO Да си обхожда директорията и да разпознава файловете от вида DealsInfostock - ако има
 # забравен стар файл алгоритъма ще го игнорира.
 
-
-def get_date_from_filename(path):
-    # TODO - да го преместя във отделен файл за общи функции
-    file_name = path.split('/')[-1]
-    number = re.search(r'\d+', file_name).group(0)
-    day, month , year = number[0:2], number[2:4], number[-4:]
-    return f'{year}-{month}-{day}'
-
-
 def send_data_to_count_deals_table(df_deals):
     connection = pg.connect ( "host='127.0.0.1' port='5432' dbname='sofix_db' user='postgres' password='1234'" )
     cur = connection.cursor ()
     df = df_deals
+    #TODO Това няма да работи за по стари файлове - избира само последната обработена дата - да се оправи
     cur.execute("select deal_date from count_deals order by deal_id desc limit 1")
     try:
         last_date = cur.fetchone()[0]
-        if datetime.datetime.strptime(str(last_date), '%Y-%m-%d') == datetime.datetime.strptime(get_date_from_filename(PATH_DEALS_INFOSTOCK), '%Y-%m-%d'):
+        if datetime.datetime.strptime(str(last_date), '%Y-%m-%d') == datetime.datetime.strptime(get_date_from_filename(PATH_DEALS_INFOSTOCK, format_data_type='ddmmyyyy'), '%Y-%m-%d'):
             print(f'The file has already been processed')
             return
     except:
         pass
+
     cur.execute ( "select deal_id from count_deals" )
     id = cur.rowcount+1
 
@@ -65,7 +62,7 @@ def send_data_to_count_deals_table(df_deals):
 
 
 def read_deals_infostock(path):
-    current_date=get_date_from_filename(path)
+    current_date=get_date_from_filename(path, format_data_type = 'ddmmyyyy')
     df_deals = pd.read_excel(path, sheet_name='Sheet1')
     df_bse_code = df_deals['Код'].str.split(pat=" / ", expand=True)[0]
     df_deals = df_deals.filter(['Час', 'Цена', 'Брой'], axis=1)
@@ -78,6 +75,5 @@ def read_deals_infostock(path):
 
 
 df_deals_data = read_deals_infostock ( PATH_DEALS_INFOSTOCK )
-print(df_deals_data)
 send_data_to_count_deals_table ( df_deals_data )
 

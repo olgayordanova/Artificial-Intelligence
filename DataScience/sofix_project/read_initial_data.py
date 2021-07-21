@@ -3,6 +3,8 @@ import pandas as pd
 from tabula import read_pdf
 import psycopg2 as pg
 
+from core import read_data_from_cd
+
 """
 Този модул чете първоначалните данни от Централен депозитар, БФБ и инвестор-бг
 и определя емисиите, подлежащи на наблюдение в текущият период.
@@ -55,19 +57,6 @@ def send_data_to_emission_table(participants):
         connection.commit ()
 
 
-def read_data_from_cd(path):
-    # TODO - Евентуално четенето да го преизползвам  - да го разбия на обща и специфична част.
-    cd_data = read_pdf ( path, pages="all", area=(11, 0, 100, 110), stream=True, relative_area=True )
-    for i in range ( 0, len ( cd_data ) ):
-        cd_data[i].columns = ['name', 'isin', 'total_count', 'free_float', 'shareholders_count']
-    cd_data_df = pd.concat ( [el for el in cd_data], ignore_index=True, axis=0 )
-    cd_data_df = cd_data_df.dropna ()
-    cd_data_df_clean = cd_data_df[cd_data_df.shareholders_count >= 750]
-    cd_data_df_clean = cd_data_df_clean.reset_index ()
-    cd_data = cd_data_df_clean.set_index ( 'isin' )
-    return cd_data
-
-
 def read_data_from_bse(path):
     base_market_emission_data = pd.read_csv ( path, sep=';' )
     base_market_emission_data = base_market_emission_data[
@@ -100,7 +89,7 @@ def generate_participants(bse_data, cd_data, path):
     return participants
 
 
-cd_data = read_data_from_cd ( PATH_CD_START_POINT_DATA )
+cd_data = read_data_from_cd ( PATH_CD_START_POINT_DATA, shareholders_restriction_count = True )
 bse_data = read_data_from_bse ( PATH_BASE_MARKET_EMISSION_DATA )
 participants = generate_participants ( bse_data, cd_data, PATH_BSE_CODE_INVESTOR )
 send_data_to_emission_table ( participants )
