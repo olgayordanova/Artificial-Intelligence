@@ -1,10 +1,54 @@
-from datetime import date
+import datetime
 import pandas as pd
+import psycopg2 as pg
 from core import get_registered_emission_from_db
 
+"""
+Този модул чете данни за текущите котировки при наблюдаваните компании и изчислява спреда между тях.
+Модула се изпълнява веднъж дневно в периода 10:30:00 до 17:00:00 часа.
+
+Модула тегли данни от сайна на Инвестор.бг:
+    https://www.investor.bg/companies/{code}/view/
+
+След като се изчисли, спреда се записва в таблица spread на sofix_db.
+"""
 
 def send_spread_to_spread_table(spread_data):
-    pass
+    connection = pg.connect ( "host='127.0.0.1' port='5432' dbname='sofix_db' user='postgres' password='1234'" )
+    cur = connection.cursor ()
+    df = spread_data
+    #TODO Това няма да работи за по стари файлове - избира само последната обработена дата - да се оправи
+    sql_str = "select spread_date from spread order by spread_date desc limit 1"
+    cur.execute(sql_str)
+    try:
+        last_date = cur.fetchone()[0]
+        if datetime.datetime.strptime(str(last_date), '%Y-%m-%d') == datetime.date.today ():
+            print(f'The file has already been processed')
+            return
+    except:
+        pass
+
+    cur.execute ( "select spread_id from spread" )
+    id = cur.rowcount+1
+
+    for index, row in df.iterrows ():
+        spread_id = str(id)
+        spread_date = str(row[1])
+        spread_bse_code_ninvestor = str ( row[0] )
+        spread = str(round(float(row[2]),6))
+        insertdata = "('" + spread_id + "','" + spread_bse_code_ninvestor + "', '" + spread_date + "', '" + spread + "')"
+
+        print ( "insertdata :", insertdata )
+        try:
+            cur.execute ( "INSERT INTO spread values " + insertdata )
+            id += 1
+            print ( "row inserted:", insertdata )
+        except pg.IntegrityError:
+            print ( "Row already exist " )
+            pass
+        except Exception as e:
+            print ( "some insert error:", e, "ins: ", insertdata )
+        connection.commit ()
 
 def calculate_spread(offers_buy,offers_sell):
     buy_price = 0.00
@@ -33,7 +77,7 @@ def calculate_spread(offers_buy,offers_sell):
 
 
 def get_data_from_web(codies):
-    today = date.today ()
+    today = datetime.date.today ()
     spread_data = pd.DataFrame ( [] )
     for code in codies:
         html_str = f"https://www.investor.bg/companies/{code}/view/"
@@ -42,7 +86,6 @@ def get_data_from_web(codies):
         spread = calculate_spread ( offers_buy, offers_sell )
         row = {'spread_bse_code_investor': code, 'spread_date': today, 'spread': spread}
         spread_data = spread_data.append ( row, ignore_index=True )
-        a=5
 
     return spread_data
 

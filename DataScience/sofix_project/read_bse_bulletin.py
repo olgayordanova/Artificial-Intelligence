@@ -1,10 +1,8 @@
 import numpy as np
 import pandas as pd
 import psycopg2 as pg
-import re
 import datetime
-
-from core import get_date_from_filename, get_registered_emission_from_db
+from core import get_date_from_filename, get_registered_emission_from_db, get_current_week
 
 """
 Този модул чете данни за цените и изтъргуваните обеми на наблюдаваните компании.
@@ -27,7 +25,7 @@ def send_data_to_prices_count_shares_table(df_bse_bulletin_data):
     cur.execute(sql_str)
     try:
         last_date = cur.fetchone()[0]
-        if datetime.datetime.strptime(str(last_date), '%Y-%m-%d') == datetime.datetime.strptime(get_date_from_filename(PATH_TO_DAILY_PDF_DATA, format_data_type = 'yyyymmdd'), '%Y-%m-%d'):
+        if datetime.datetime.strptime(str(last_date), '%Y-%m-%d') == datetime.datetime.strptime(get_date_from_filename(PATH_BSE_BULLETIN, format_data_type = 'yyyymmdd'), '%Y-%m-%d'):
             print(f'The file has already been processed')
             return
     except:
@@ -42,7 +40,8 @@ def send_data_to_prices_count_shares_table(df_bse_bulletin_data):
         pcs_bse_code_new = str ( row[0] )
         pcs_price = str(round(float(row[2]),4))
         pcs_daily_count = str(int(row[1]))
-        insertdata = "('" + pcs_id + "','" + pcs_date + "', '" + pcs_bse_code_new + "', '" + pcs_price + "','" + pcs_daily_count + "')"
+        pcs_week = str(int(row[4]))
+        insertdata = "('" + pcs_id + "','" + pcs_date + "', '" + pcs_bse_code_new + "', '" + pcs_price + "','" + pcs_daily_count + "','" + pcs_week + "')"
 
         print ( "insertdata :", insertdata )
         try:
@@ -72,6 +71,7 @@ def read_bse_bulletin(path):
     df_bse_data.columns=['emission_bse_code_new', 'daily_count', 'price']
     df_bse_data['daily_count'] = df_bse_data['daily_count'].replace(np.nan, 0)
     df_bse_data['current_date'] = current_date
+    df_bse_data['current_week'] = get_current_week(path, format_data_type = 'ddmmyyyy')
     return df_bse_data
 
 

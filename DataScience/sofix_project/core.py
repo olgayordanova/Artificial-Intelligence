@@ -1,4 +1,6 @@
 import re
+from datetime import datetime
+
 import pandas as pd
 import psycopg2 as pg
 from tabula import read_pdf
@@ -22,6 +24,12 @@ def get_date_from_filename(path, format_data_type):
     else:
         day, month, year = number[0:2], number[2:4], number[-4:] #  DealsInfostock-ddmmyyyy.xlsx
     return f'{year}-{month}-{day}'
+
+def get_current_week(path, format_data_type):
+    current_date = get_date_from_filename(path, format_data_type)
+    current_date=datetime.strptime(current_date,  '%Y-%m-%d')
+    week_number =current_date.strftime ( "%U" )
+    return week_number
 
 def read_data_from_cd(path, shareholders_restriction_count):
     cd_data = read_pdf ( path, pages="all", area=(11, 0, 100, 110), stream=True, relative_area=True )
