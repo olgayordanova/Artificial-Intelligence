@@ -17,12 +17,13 @@ def send_spread_to_spread_table(spread_data):
     connection = pg.connect ( "host='127.0.0.1' port='5432' dbname='sofix_db' user='postgres' password='1234'" )
     cur = connection.cursor ()
     df = spread_data
-    #TODO Това няма да работи за по стари файлове - избира само последната обработена дата - да се оправи
+    # TODO Това няма да работи за по стари файлове - избира само последната обработена дата - да се оправи
+    # TODO По-удачно да се прави проверката дали е обработена датата преди да се четат данните.
     sql_str = "select spread_date from spread order by spread_date desc limit 1"
     cur.execute(sql_str)
     try:
         last_date = cur.fetchone()[0]
-        if datetime.datetime.strptime(str(last_date), '%Y-%m-%d') == datetime.date.today ():
+        if datetime.datetime.strptime(str(last_date), '%Y-%m-%d') == datetime.datetime.strptime(str(datetime.date.today ()), '%Y-%m-%d'):
             print(f'The file has already been processed')
             return
     except:
@@ -93,7 +94,6 @@ def get_data_from_web(codies):
 registered_emission = get_registered_emission_from_db('emission_bse_code_investor')
 codies = [registered_emission[i][0] for i in range(0, len(registered_emission))]
 spread_data = get_data_from_web(codies)
-print(spread_data)
 send_spread_to_spread_table(spread_data)
 
 # get bse_code_investor from emission

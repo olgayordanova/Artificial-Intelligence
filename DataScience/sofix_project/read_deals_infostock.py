@@ -1,8 +1,6 @@
 import pandas as pd
 import psycopg2 as pg
-import re
 import datetime
-
 from core import get_date_from_filename
 
 """
@@ -16,11 +14,11 @@ from core import get_date_from_filename
 """
 
 # TODO clean table if there new period - better do this with all DB before new period df
-#  ['Week_Number'] = df['Date'].dt.week
+
 
 PATH_DEALS_INFOSTOCK = 'data/daily_data/DealsInfostock-19072021.xlsx'
-# TODO Да си обхожда директорията и да разпознава файловете от вида DealsInfostock - ако има
-# забравен стар файл алгоритъма ще го игнорира.
+# TODO Да си обхожда директорията и да разпознава файловете от вида DealsInfostock - ако има стар файл в директорията алгоритъма ще го игнорира.
+
 
 def send_data_to_count_deals_table(df_deals):
     connection = pg.connect ( "host='127.0.0.1' port='5432' dbname='sofix_db' user='postgres' password='1234'" )
