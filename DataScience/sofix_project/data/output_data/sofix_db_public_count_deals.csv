@@ -1,3 +1,4 @@
+deal_id,deal_date,deal_time,deal_bse_code_new,deal_price,deal_count
 1,2021-07-19,17:00:23,SGH,0.494,7500
 2,2021-07-19,17:00:21,TBS,13.6,37
 3,2021-07-19,17:00:21,TBS,13.6,500
