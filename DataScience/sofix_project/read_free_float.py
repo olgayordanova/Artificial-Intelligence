@@ -1,11 +1,8 @@
-import numpy as np
 import pandas as pd
-# import tabula
-from tabula import read_pdf
 import psycopg2 as pg
-import re
 import datetime
-
+import os
+import glob
 from core import get_registered_emission_from_db, get_date_from_filename, read_data_from_cd
 
 """
@@ -18,7 +15,8 @@ from core import get_registered_emission_from_db, get_date_from_filename, read_d
 Взема информация за всички регистрирани в ЦД емисии, отсява данни само наблюдаваните емисии и ги записва в таблица free_float на sofix_db.
 """
 
-PATH_TO_DAILY_PDF_DATA = 'data/daily_data/FREE_FLOAT_20210716.pdf'
+current_path = os.getcwd ()+'\\data\\daily_data\\'
+paths = glob.glob ( os.path.join ( current_path, "*.pdf" ) )
 
 def merge_data(cd_data, registered_emission):
     registered_emission = pd.DataFrame(registered_emission, columns=["isin"])
@@ -35,7 +33,7 @@ def send_data_to_freefloat_table(freefloat_data):
     cur.execute(sql_str)
     try:
         last_date = cur.fetchone()[0]
-        if datetime.datetime.strptime(str(last_date), '%Y-%m-%d') == datetime.datetime.strptime(get_date_from_filename(PATH_TO_DAILY_PDF_DATA, format_data_type = 'yyyymmdd'), '%Y-%m-%d'):
+        if datetime.datetime.strptime(str(last_date), '%Y-%m-%d') == datetime.datetime.strptime(get_date_from_filename(path, format_data_type = 'yyyymmdd'), '%Y-%m-%d'):
             print(f'The file has already been processed')
             return
     except:
@@ -65,8 +63,8 @@ def send_data_to_freefloat_table(freefloat_data):
             print ( "some insert error:", e, "ins: ", insertdata )
         connection.commit ()
 
-
-cd_data = read_data_from_cd ( PATH_TO_DAILY_PDF_DATA, shareholders_restriction_count = False )
-free_float_data = merge_data(cd_data, get_registered_emission_from_db('isin'))
-send_data_to_freefloat_table(free_float_data)
+for path in paths:
+    cd_data = read_data_from_cd ( path, shareholders_restriction_count = False )
+    free_float_data = merge_data(cd_data, get_registered_emission_from_db('emission_isin'))
+    send_data_to_freefloat_table(free_float_data)
 

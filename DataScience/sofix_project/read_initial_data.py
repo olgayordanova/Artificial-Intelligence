@@ -1,8 +1,5 @@
 import pandas as pd
-# import tabula
-from tabula import read_pdf
 import psycopg2 as pg
-
 from core import read_data_from_cd
 
 """

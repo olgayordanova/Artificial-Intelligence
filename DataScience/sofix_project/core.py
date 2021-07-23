@@ -4,6 +4,8 @@ from datetime import datetime
 import pandas as pd
 import psycopg2 as pg
 from tabula import read_pdf
+import os
+import glob
 
 
 def get_registered_emission_from_db(ind_col):
@@ -30,6 +32,7 @@ def get_current_week(path, format_data_type):
     current_date=datetime.strptime(current_date,  '%Y-%m-%d')
     week_number =current_date.strftime ( "%U" )
     return week_number
+#  ['Week_Number'] = df['Date'].dt.week
 
 def read_data_from_cd(path, shareholders_restriction_count):
     cd_data = read_pdf ( path, pages="all", area=(11, 0, 100, 110), stream=True, relative_area=True )

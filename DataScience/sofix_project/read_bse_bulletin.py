@@ -2,6 +2,8 @@ import numpy as np
 import pandas as pd
 import psycopg2 as pg
 import datetime
+import os
+import glob
 from core import get_date_from_filename, get_registered_emission_from_db, get_current_week
 
 """
@@ -14,7 +16,8 @@ from core import get_date_from_filename, get_registered_emission_from_db, get_cu
 Взема информация за дневната търговия на наблюдаваните емисии и ги записва в таблица prices_count_shares на sofix_db.
 """
 
-PATH_BSE_BULLETIN = 'data/daily_data/Bltex19072021.xls'
+current_path = os.getcwd ()+'\\data\\daily_data\\'
+paths = glob.glob ( os.path.join ( current_path, "*.xls" ) )
 
 def send_data_to_prices_count_shares_table(df_bse_bulletin_data):
     connection = pg.connect ( "host='127.0.0.1' port='5432' dbname='sofix_db' user='postgres' password='1234'" )
@@ -25,7 +28,7 @@ def send_data_to_prices_count_shares_table(df_bse_bulletin_data):
     cur.execute(sql_str)
     try:
         last_date = cur.fetchone()[0]
-        if datetime.datetime.strptime(str(last_date), '%Y-%m-%d') == datetime.datetime.strptime(get_date_from_filename(PATH_BSE_BULLETIN, format_data_type = 'yyyymmdd'), '%Y-%m-%d'):
+        if datetime.datetime.strptime(str(last_date), '%Y-%m-%d') == datetime.datetime.strptime(get_date_from_filename(path, format_data_type = 'yyyymmdd'), '%Y-%m-%d'):
             print(f'The file has already been processed')
             return
     except:
@@ -36,12 +39,13 @@ def send_data_to_prices_count_shares_table(df_bse_bulletin_data):
 
     for index, row in df.iterrows ():
         pcs_id = str(id)
-        pcs_date = str(row[3])
+        pcs_date = str(row[4])
         pcs_bse_code_new = str ( row[0] )
-        pcs_price = str(round(float(row[2]),4))
+        pcs_product_price = str(round(float(row[2]), 4))
+        pcs_price = str(round(float(row[3]),4))
         pcs_daily_count = str(int(row[1]))
-        pcs_week = str(int(row[4]))
-        insertdata = "('" + pcs_id + "','" + pcs_date + "', '" + pcs_bse_code_new + "', '" + pcs_price + "','" + pcs_daily_count + "','" + pcs_week + "')"
+        pcs_week = str(int(row[5]))
+        insertdata = "('" + pcs_id + "','" + pcs_date + "', '" + pcs_bse_code_new + "', '" + pcs_price + "','" + pcs_daily_count + "','" + pcs_week + "','" + pcs_product_price + "')"
 
         print ( "insertdata :", insertdata )
         try:
@@ -67,14 +71,14 @@ def read_bse_bulletin(path):
     current_date=get_date_from_filename(path, format_data_type = 'ddmmyyyy')
     df_bse_data = pd.read_excel(path, sheet_name='Пазари акции и др. недългови ЦК')
     df_bse_data =  df_bse_data.iloc[18:]
-    df_bse_data = df_bse_data[['Unnamed: 0', 'Unnamed: 7', 'Unnamed: 13']]
-    df_bse_data.columns=['emission_bse_code_new', 'daily_count', 'price']
+    df_bse_data = df_bse_data[['Unnamed: 0', 'Unnamed: 7', 'Unnamed: 12', 'Unnamed: 13']]
+    df_bse_data.columns=['emission_bse_code_new', 'daily_count', 'product_price', 'price']
     df_bse_data['daily_count'] = df_bse_data['daily_count'].replace(np.nan, 0)
     df_bse_data['current_date'] = current_date
     df_bse_data['current_week'] = get_current_week(path, format_data_type = 'ddmmyyyy')
     return df_bse_data
 
-
-df_bse_bulletin_data = read_bse_bulletin ( PATH_BSE_BULLETIN )
-df_bse_bulletin_data = merge_data(df_bse_bulletin_data, get_registered_emission_from_db('emission_bse_code_new'))
-send_data_to_prices_count_shares_table(df_bse_bulletin_data)
+for path in paths:
+    df_bse_bulletin_data = read_bse_bulletin ( path )
+    df_bse_bulletin_data = merge_data(df_bse_bulletin_data, get_registered_emission_from_db('emission_bse_code_new'))
+    send_data_to_prices_count_shares_table(df_bse_bulletin_data)
