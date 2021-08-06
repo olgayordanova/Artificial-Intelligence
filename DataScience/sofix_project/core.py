@@ -35,7 +35,7 @@ def get_current_week(path, format_data_type):
 #  ['Week_Number'] = df['Date'].dt.week
 
 def read_data_from_cd(path, shareholders_restriction_count):
-    cd_data = read_pdf ( path, pages="all", area=(11, 0, 100, 110), stream=True, relative_area=True )
+    cd_data = read_pdf ( path, pages="all", area=(10, 0, 100, 110), stream=True, relative_area=True )
     for i in range ( 0, len ( cd_data ) ):
         cd_data[i].columns = ['name', 'isin', 'total_count', 'free_float', 'shareholders_count']
     cd_data_df = pd.concat ( [el for el in cd_data], ignore_index=True, axis=0 )
