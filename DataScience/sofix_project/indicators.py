@@ -106,7 +106,7 @@ def report_competition(count_deals,spread,free_float_market_capitalization,weekl
     registered_emission['rank'] = registered_emission['rank_deals']+registered_emission['rank_spread']+registered_emission['rank_cap']+registered_emission['rank_vol']
     df_competition = registered_emission.sort_values(by=['rank'],ascending=True)
     df_competition = df_competition.reset_index(drop=True)
-    df_competition = df_competition[['rank','emission_bse_code_new', 'count_deals', 'spread', 'market_cap']]
+    df_competition = df_competition[['rank','emission_bse_code_new', 'count_deals', 'spread', 'market_cap', 'weekly_volume']]
 
     return df_competition
 
@@ -116,15 +116,24 @@ spread = spread()
 free_float_market_capitalization = free_float_market_capitalization()
 weekly_volume = weekly_volume()
 report_competition = report_competition(count_deals,spread,free_float_market_capitalization,weekly_volume )
+
 report_competition.to_csv('data/competition.csv')
+count_deals.to_csv('data/count_deals.csv')
+spread.to_csv('data/spread.csv')
+free_float_market_capitalization.to_csv('data/free_float_market_capitalization.csv')
+weekly_volume.to_csv('data/weekly_volume.csv')
 
-print((report_competition))
 
+# print((report_competition))
+#
 # print(len(count_deals))
 # print(len(spread))
+#
 # print(len(free_float_market_capitalization))
 # print(len(weekly_volume))
+#
 # print((count_deals))
 # print((spread))
+#
 # print((free_float_market_capitalization))
 # print((weekly_volume))
