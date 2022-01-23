@@ -1,0 +1,99 @@
+﻿Ticker;Name;Type;Source;Frequency
+^GSPC;S&P 500;Indices;Yahoo;Daily
+^DJI;Dow 30;Indices;Yahoo;Daily
+^IXIC;Nasdaq;Indices;Yahoo;Daily
+^NYA;NYSE COMPOSITE (DJ);Indices;Yahoo;Daily
+^VIX;CBOE Volatility Index;Indices;Yahoo;Daily
+000001.SS;SSE Composite Index;Indices;Yahoo;Daily
+EURUSD=X;EUR/USD;Currencies;Yahoo;Daily
+JPY=X;USD/JPY;Currencies;Yahoo;Daily
+GBPUSD=X;GBP/USD;Currencies;Yahoo;Daily
+^IRX;13 Week Treasury Bill;Treasure Bond Rates;Yahoo;Daily
+^FVX;Treasury Yield 5 Years;Treasure Bond Rates;Yahoo;Daily
+^TNX;Treasury Yield 10 Years;Treasure Bond Rates;Yahoo;Daily
+VWO;Vanguard FTSE Emerging Markets Index Fund ETF Shares;ETFs;Yahoo;Daily
+DWCR;Arrow DWA Tactical: International ETF;ETFs;Yahoo;Daily
+QQQ;Invesco QQQ Trust;ETFs;Yahoo;Daily
+KWIAX;Kinetics Alternative Income Fund Advisor Class A;Mutual Funds;Yahoo;Daily
+FRQIX;Fidelity Advisor Managed Retirement 2010 Fund Class I;Mutual Funds;Yahoo;Daily
+DODBX;Dodge & Cox Balanced Fund;Mutual Funds;Yahoo;Daily
+NELIX;Nuveen Equity Long/Short Fund Class I;Mutual Funds;Yahoo;Daily
+IUASX;VY Invesco Equity and Income Portfolio Class S;Mutual Funds;Yahoo;Daily
+IPFPX;Poplar Forest Partners Fund Institutional Class;Mutual Funds;Yahoo;Daily
+JLCYX;John Hancock Fundamental Large Cap Core Fund Class R2;Mutual Funds;Yahoo;Daily
+BIPIX;ProFunds Biotechnology UltraSector Fund Investor Class;Mutual Funds;Yahoo;Daily
+OGLYX;Invesco Global Fund Class Y;Mutual Funds;Yahoo;Daily
+ARAIX;Ariel Fund Institutional Class;Mutual Funds;Yahoo;Daily
+IWIRX;Guinness Atkinson Global Innovators Fund Investor Class;Mutual Funds;Yahoo;Daily
+CNPIX;ProFunds Consumer Goods Ultra Sector Fund Investor Class;Mutual Funds;Yahoo;Daily
+VWILX;Vanguard International Growth Fund Admiral Shares;Mutual Funds;Yahoo;Daily
+OAKMX;Oakmark Fund Investor Class;Mutual Funds;Yahoo;Daily
+PAGSX;T. Rowe Price Global Stock Fund Advisor Class;Mutual Funds;Yahoo;Daily
+OPGIX;Invesco Global Opportunities Fund Class A;Mutual Funds;Yahoo;Daily
+PARNX;Parnassus Mid Cap Growth Fund - Investor;Mutual Funds;Yahoo;Daily
+RYOCX;Rydex NASDAQ-100 Fund Investor Class;Mutual Funds;Yahoo;Daily
+POGSX;Pin Oak Equity Fund;Mutual Funds;Yahoo;Daily
+FDYNX;Franklin DynaTech Fund Class C;Mutual Funds;Yahoo;Daily
+BPTRX;Baron Partners Fund Retail Shares;Mutual Funds;Yahoo;Daily
+UOPIX;ProFunds UltraNASDAQ-100 Fund Investor Class;Mutual Funds;Yahoo;Daily
+RYVLX;Rydex NASDAQ-100 2x Strategy Fund Class A;Mutual Funds;Yahoo;Daily
+BTC-USD;Bitcoin USD;Cryptocurrencies;Yahoo;Daily
+ETH-USD;Ethereum USD;Cryptocurrencies;Yahoo;Daily
+AAPL;Apple Inc.;Companies S&P500;Yahoo;Daily
+MSFT;Microsoft Corporation;Companies S&P500;Yahoo;Daily
+AMZN;Amazon.com Inc.;Companies S&P500;Yahoo;Daily
+TSLA;Tesla Inc;Companies S&P500;Yahoo;Daily
+GOOGL;Alphabet Inc. Class A;Companies S&P500;Yahoo;Daily
+GOOG;Alphabet Inc. Class C;Companies S&P500;Yahoo;Daily
+FB;Meta Platforms Inc. Class A;Companies S&P500;Yahoo;Daily
+NVDA;NVIDIA Corporation;Companies S&P500;Yahoo;Daily
+BRK.B;Berkshire Hathaway Inc. Class B;Companies S&P500;Yahoo;Daily
+JPM;JPMorgan Chase & Co.;Companies S&P500;Yahoo;Daily
+JNJ;Johnson & Johnson;Companies S&P500;Yahoo;Daily
+UNH;UnitedHealth Group Incorporated;Companies S&P500;Yahoo;Daily
+HD;Home Depot Inc.;Companies S&P500;Yahoo;Daily
+PG;Procter & Gamble Company;Companies S&P500;Yahoo;Daily
+V;Visa Inc. Class A;Companies S&P500;Yahoo;Daily
+BAC;Bank of America Corp;Companies S&P500;Yahoo;Daily
+MA;Mastercard Incorporated Class A;Companies S&P500;Yahoo;Daily
+PFE;Pfizer Inc.;Companies S&P500;Yahoo;Daily
+XOM;Exxon Mobil Corporation;Companies S&P500;Yahoo;Daily
+DIS;Walt Disney Company;Companies S&P500;Yahoo;Daily
+CSCO;Cisco Systems Inc.;Companies S&P500;Yahoo;Daily
+AVGO;Broadcom Inc.;Companies S&P500;Yahoo;Daily
+ADBE;Adobe Inc.;Companies S&P500;Yahoo;Daily
+CVX;Chevron Corporation;Companies S&P500;Yahoo;Daily
+PEP;PepsiCo Inc.;Companies S&P500;Yahoo;Daily
+TMO;Thermo Fisher Scientific Inc.;Companies S&P500;Yahoo;Daily
+KO;Coca-Cola Company;Companies S&P500;Yahoo;Daily
+ABBV;AbbVie Inc.;Companies S&P500;Yahoo;Daily
+CMCSA;Comcast Corporation Class A;Companies S&P500;Yahoo;Daily
+NFLX;Netflix Inc.;Companies S&P500;Yahoo;Daily
+ABT;Abbott Laboratories;Companies S&P500;Yahoo;Daily
+ACN;Accenture Plc Class A;Companies S&P500;Yahoo;Daily
+COST;Costco Wholesale Corporation;Companies S&P500;Yahoo;Daily
+CRM;salesforce.com inc.;Companies S&P500;Yahoo;Daily
+INTC;Intel Corporation;Companies S&P500;Yahoo;Daily
+WFC;Wells Fargo & Company;Companies S&P500;Yahoo;Daily
+VZ;Verizon Communications Inc.;Companies S&P500;Yahoo;Daily
+PYPL;PayPal Holdings Inc.;Companies S&P500;Yahoo;Daily
+WMT;Walmart Inc.;Companies S&P500;Yahoo;Daily
+QCOM;Qualcomm Inc;Companies S&P500;Yahoo;Daily
+MRK;Merck & Co. Inc.;Companies S&P500;Yahoo;Daily
+LLY;Eli Lilly and Company;Companies S&P500;Yahoo;Daily
+MCD;McDonald's Corporation;Companies S&P500;Yahoo;Daily
+T;AT&T Inc.;Companies S&P500;Yahoo;Daily
+NKE;NIKE Inc. Class B;Companies S&P500;Yahoo;Daily
+DHR;Danaher Corporation;Companies S&P500;Yahoo;Daily
+LOW;Lowe's Companies Inc.;Companies S&P500;Yahoo;Daily
+LIN;Linde plc;Companies S&P500;Yahoo;Daily
+TXN;Texas Instruments Incorporated;Companies S&P500;Yahoo;Daily
+NEE;NextEra Energy Inc.;Companies S&P500;Yahoo;Daily
+FINRA-FNYX_TWTR;FINRA/NYSE TRF Short Interest: TWTR;Short Trade Indicator;FINRA-FNYX_TWTR.csv;Daily
+ISM-MAN_PMI;PMI Composite Index;Coposite Index;ISM-MAN_PMI.csv;Monthly
+RATEINF-INFLATION_USA;Inflation YOY - USA;Inflation Indicator;RATEINF-INFLATION_USA.csv;Monthly
+RATEINF-CPI_USA;Consumer Price Index - USA;Inflation Indicator;RATEINF-CPI_USA.csv;Monthly
+T10YIE;10-Year Breakeven Inflation Rate (T10YIE);Inflation Indicator;T10YIE.csv;Daily
+T5YIE;5-Year Breakeven Inflation Rate (T5YIE);Inflation Indicator;T5YIE.csv;Daily
+EIA-STEO_CONSRUS_M;Real Personal Consumption Expenditures, Monthly;Consumpion;EIA-STEO_CONSRUS_M.csv;Monthly
+TSI;S&P 500 Twitter Sentiment Index;Sentiment;tsi_sp.xls;Daily
