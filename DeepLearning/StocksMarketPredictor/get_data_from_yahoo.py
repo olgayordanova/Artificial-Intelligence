@@ -8,11 +8,11 @@ os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2' #https://stackoverflow.com/questions/66
 
 current_path = os.getcwd ()+'\\data\\'
 
-START_YEAR = 2018
+START_YEAR = 2010
 END_YEAR = 2022
 STEP = 1
 
-START_DATE = "2018-02-06"
+START_DATE = "2010-01-01"
 END_DATE = "2021-12-31"
 
 tickers = pd.read_csv(os.path.join ( current_path, "indicators_list.csv"), sep = ";")
@@ -31,12 +31,19 @@ def read_data_from_yahoo(ticker):
 def add_data_to_df(ticker, stock_df):
     df = pd.read_csv ( f'data/stocks_data/{ticker}.csv', header=0, parse_dates=[0],
                              date_parser=parser )
-    mask = (df['Date'] > START_DATE) & (df['Date'] <= END_DATE)
+    mask = (df['Date'] >= START_DATE) & (df['Date'] <= END_DATE)
     df = df.loc[mask]
-    df.reset_index ( inplace=True, drop=True )
+    df = df[["Date", "Adj Close"]]
+    df = df.rename({'Adj Close': ticker}, axis=1)
+    df.set_index ( 'Date' )
+    # df.reset_index ( inplace=True, drop=True )
     if len(stock_df) == 0:
         stock_df = df[["Date"]]
-    stock_df[ticker] = df["Adj Close"]
+        stock_df.set_index ( 'Date' )
+    # stock_df[ticker] = df["Adj Close"]
+    # stock_df = stock_df.merge ( df, left_index=True, right_index=True, how='inner' )
+    stock_df = pd.merge ( stock_df, df, how = 'left', left_on = 'Date', right_on = 'Date' )
+    stock_df = pd.merge ( stock_df, df, how = 'left' )
     return stock_df
 
 def scraping_data(stock_df, tickers):
@@ -52,5 +59,5 @@ def scraping_data(stock_df, tickers):
 
 stock_df = pd.DataFrame()
 stock_df = scraping_data(stock_df,tickers)
-stock_df.to_csv ( f'data/stocks_data/dataset_4.csv', index="Data", header=True )
+stock_df.to_csv ( f'data/stocks_data/dataset_full.csv', index="Data", header=True )
 
